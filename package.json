@@ -11,7 +11,8 @@
     "tsc": "tsc",
     "build": "npx tsc",
     "lint": "npx eslint . --ext .ts",
-    "prettier": "prettier --config .prettierrc src/**/*.ts --write"
+    "prettier": "prettier --config .prettierrc src/**/*.ts --write",
+    "migrate": "db-migrate --env test up && db-migrate up"
   },
   "author": "Dela",
   "license": "ISC",
