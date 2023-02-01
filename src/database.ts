@@ -16,7 +16,7 @@ let client: Pool | any
 console.log(ENV)
 
 if (ENV === 'test') {
-  const client = new Pool({
+  client = new Pool({
     host: DATABASE_HOST,
     database: DATABASE_TEST_DB,
     user: DATABASE_USER,
@@ -25,7 +25,7 @@ if (ENV === 'test') {
 }
 
 if (ENV === 'dev') {
-  const client = new Pool({
+  client = new Pool({
     host: DATABASE_HOST,
     database: DATABASE_NAME,
     user: DATABASE_USER,
