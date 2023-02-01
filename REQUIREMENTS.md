@@ -40,14 +40,14 @@ These are the notes from a meeting with the front-end developer that outline the
 
 ## Data Schema
 
-#### Product
+### Product
 
 - id [INTEGER] [PRIMARY KEY],
 - name [VARCHAR],
 - available_quantity [INTEGER],
 - price [INTEGER]
 
-#### User
+### User
 
 - id [INTEGER][PRIMARY KEY],
 - username [VARCHAR],
@@ -55,7 +55,7 @@ These are the notes from a meeting with the front-end developer that outline the
 - last_name [VARCHAR],
 - password [VARCHAR]
 
-#### Orders
+### Orders
 
 - id [INTEGER][PRIMARY KEY],,
 - status [VARCHAR],
