@@ -65,8 +65,12 @@ const findByUserAndStatus = async (req: Request, res: Response) => {
 }
 
 const orders_routes = (app: express.Application) => {
-  app.get('/api/orders', index)
-  app.get('/api/orders/:status/order-status', showOrderStatus)
+  app.get('/api/orders', AuthenticationService.authenticate, index)
+  app.get(
+    '/api/orders/:status/order-status',
+    AuthenticationService.authenticate,
+    showOrderStatus
+  )
   app.post('/api/order/product', AuthenticationService.authenticate, create)
   app.get(
     '/api/orders/:status/:user_id',
