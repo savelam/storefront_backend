@@ -10,7 +10,7 @@ const { DATABASE_HOST, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD, DATABASE
 let client;
 console.log(ENV);
 if (ENV === 'test') {
-    const client = new pg_1.Pool({
+    client = new pg_1.Pool({
         host: DATABASE_HOST,
         database: DATABASE_TEST_DB,
         user: DATABASE_USER,
@@ -18,7 +18,7 @@ if (ENV === 'test') {
     });
 }
 if (ENV === 'dev') {
-    const client = new pg_1.Pool({
+    client = new pg_1.Pool({
         host: DATABASE_HOST,
         database: DATABASE_NAME,
         user: DATABASE_USER,

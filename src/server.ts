@@ -1,9 +1,5 @@
 import express, { Request, Response } from 'express'
 import dotevn from 'dotenv'
-// @ts-ignore
-
-import bodyParser from 'body-parser'
-import cors from 'cors'
 
 import product_routes from '../src/handlers/Product'
 import user_routes from '../src/handlers/User'
@@ -22,7 +18,6 @@ const PORT = process.env.PORT || 3000
 //  optionsSuccessStatus: 200,
 //}
 
-// @ts-ignore
 //console.log(process.env.ENV)
 //app.use(cors(corsOptions))
 app.use(express.json())

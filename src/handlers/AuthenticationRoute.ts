@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, Application } from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 
 import { StatusCodes } from 'http-status-codes'
 

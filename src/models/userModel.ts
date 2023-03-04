@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
 import client from '../database'
 
@@ -62,7 +61,6 @@ export class UserModel {
   }
 
   async authenticate(username: string, password: string): Promise<User | null> {
-    // @ts-ignore
     const conn = await client.connect()
     const sql = 'SELECT password_digest FROM users WHERE username=($1)'
 

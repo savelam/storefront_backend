@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,16 +10,16 @@ const Authentication_1 = require("../services/Authentication");
 // load the env
 dotenv_1.default.config();
 const store = new productModel_1.ProductStore();
-const index = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const index = async (_req, res, next) => {
     try {
-        const products = yield store.index();
+        const products = await store.index();
         res.status(http_status_codes_1.StatusCodes.OK).json(products);
     }
     catch (error) {
         next(error);
     }
-});
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const create = async (req, res) => {
     // @ts-ignore
     const product = {
         name: req.body.name,
@@ -36,33 +27,33 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         price: req.body.price,
     };
     try {
-        const newProduct = yield store.create(product);
+        const newProduct = await store.create(product);
         res.json(newProduct);
     }
     catch (err) {
         res.status(400);
         res.json(`Product could not be created.${err}`);
     }
-});
-const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const show = async (req, res) => {
     try {
-        const product = yield store.show(req.params.id);
+        const product = await store.show(req.params.id);
         res.json(product);
     }
     catch (error) {
         res.json(`Product error.${error}`);
     }
-});
-const destroy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const destroy = async (req, res) => {
     try {
-        const deleted = yield store.delete(req.body.id);
+        const deleted = await store.delete(req.body.id);
         res.json(deleted);
     }
     catch (error) {
         res.json(`Error deleting Product.${error}`);
     }
-});
-const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+};
+const update = async (req, res) => { };
 const product_routes = (app) => {
     app.get('/api/products', index);
     app.get('/api/products/:id', show);

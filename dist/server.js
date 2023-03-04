@@ -17,7 +17,6 @@ const PORT = process.env.PORT || 3000;
 //  origin: 'http://example.com',
 //  optionsSuccessStatus: 200,
 //}
-// @ts-ignore
 //console.log(process.env.ENV)
 //app.use(cors(corsOptions))
 app.use(express_1.default.json());
@@ -28,7 +27,7 @@ app.get('/', function (req, res) {
 (0, User_1.default)(app);
 (0, AuthenticationRoute_1.default)(app);
 (0, Product_1.default)(app);
-app.listen(3000, function () {
+app.listen(PORT, function () {
     console.log(`starting app on: ${PORT}`);
 });
 exports.default = app;
