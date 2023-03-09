@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express'
 import dotevn from 'dotenv'
 
-import product_routes from '../src/handlers/Product'
-import user_routes from '../src/handlers/User'
+//import product_routes from '../src/handlers/Product'
+//import user_routes from '../src/handlers/User'
+import product_routes from './handlers/Product'
+import user_routes from './handlers/User'
 import authenticatitonRoutes from './handlers/AuthenticationRoute'
 
 // load the env

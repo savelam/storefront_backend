@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const Product_1 = __importDefault(require("../src/handlers/Product"));
-const User_1 = __importDefault(require("../src/handlers/User"));
+//import product_routes from '../src/handlers/Product'
+//import user_routes from '../src/handlers/User'
+const Product_1 = __importDefault(require("./handlers/Product"));
+const User_1 = __importDefault(require("./handlers/User"));
 const AuthenticationRoute_1 = __importDefault(require("./handlers/AuthenticationRoute"));
 // load the env
 dotenv_1.default.config();
