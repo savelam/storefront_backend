@@ -7,7 +7,7 @@
     "start": "nodemon --watch './**/*.ts' --exec 'ts-node' ./src/server.ts",
     "devStart": "nodemon src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "set NODE_ENV=test && yarn run tsc && db-migrate --env test reset && db-migrate --env test up && jest",
+    "test": "set NODE_ENV=test && npm run tsc && db-migrate --env test reset && db-migrate --env test up && jasmine",
     "tsc": "tsc",
     "build": "npx tsc",
     "lint": "npx eslint . --ext .ts",
