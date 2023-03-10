@@ -59,12 +59,12 @@ class OrderStore {
             const conn = await database_1.default.connect();
             const sql = 'INSERT INTO orders (product_id,user_id, status) VALUES($1, $2,$3) RETURNING *';
             const result = await conn.query(sql, [o.product_id, o.user_id, o.status]);
-            const product = result.rows[0];
+            const order = result.rows[0];
             conn.release();
-            return product;
+            return order;
         }
         catch (error) {
-            throw new Error(`Unable to create orders (${o.status}): ${error}`);
+            throw new Error(`Unable to create orders (${o.status}): ${error} ${o.product_id}`);
         }
     }
 }

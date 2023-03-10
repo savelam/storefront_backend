@@ -59,9 +59,9 @@ describe('Test User Creation', () => {
 })
 
 describe('users route should send status code', () => {
-  it('200 if all products route is accessed', async () => {
+  it('200 if all users are returned.', async () => {
     const res = await req
-      .get(`api/users`)
+      .get(`/api/users`)
       .set({ authorization: `Bearer ${token}` })
     expect(res.statusCode).toBe(200)
   })
@@ -74,8 +74,10 @@ describe('users route should send status code', () => {
       username: 'francis',
       password: DEFAULT_PASS as string,
     })
+
+    console.log(user)
     const res = await req
-      .get(`api/users/${user.id}`)
+      .get(`/api/users/${user.id}`)
       .set({ authorization: `Bearer ${token}` })
     expect(res.statusCode).toBe(200)
   })

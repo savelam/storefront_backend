@@ -11,13 +11,13 @@ const Authentication_1 = require("../services/Authentication");
 dotenv_1.default.config();
 const store = new orderModel_1.OrderStore();
 // display all orders
-const index = async (_req, res, next) => {
+const index = async (_req, res, _next) => {
     try {
         const orders = await store.index();
         res.status(http_status_codes_1.StatusCodes.OK).json(orders);
     }
     catch (error) {
-        next(error);
+        res.json(`Order error.${error}`);
     }
 };
 const create = async (req, res) => {
@@ -29,7 +29,8 @@ const create = async (req, res) => {
     };
     try {
         const newOrder = await store.create(order);
-        res.json(newOrder);
+        //res.json(newOrder)
+        res.status(http_status_codes_1.StatusCodes.CREATED).json(newOrder);
     }
     catch (err) {
         res.status(400);
@@ -39,7 +40,8 @@ const create = async (req, res) => {
 const showOrderStatus = async (req, res) => {
     try {
         const orders = await store.showOrderStatus(req.params.status);
-        res.json(orders);
+        res.status(http_status_codes_1.StatusCodes.OK).json(orders);
+        //res.json(orders)
     }
     catch (error) {
         res.json(`Order error.${error}`);
@@ -58,7 +60,7 @@ const findByUserAndStatus = async (req, res) => {
 const orders_routes = (app) => {
     app.get('/api/orders', Authentication_1.AuthenticationService.authenticate, index);
     app.get('/api/orders/:status/order-status', Authentication_1.AuthenticationService.authenticate, showOrderStatus);
-    app.post('/api/order/product', Authentication_1.AuthenticationService.authenticate, create);
+    app.post('/api/orders/product', Authentication_1.AuthenticationService.authenticate, create);
     app.get('/api/orders/:status/:user_id', Authentication_1.AuthenticationService.authenticate, findByUserAndStatus);
 };
 exports.default = orders_routes;

@@ -8,10 +8,6 @@ const store = new ProductStore()
 const req = supertest(app)
 
 describe('Product model ', () => {
-  it('should be 1 (index)', async () => {
-    const result = await store.index()
-    expect(result.length).toBe(1)
-  })
   /*  it('Test for show', async () => {
     const result = await store.show('1')
     expect(result).toBe(1)

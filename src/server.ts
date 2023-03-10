@@ -5,6 +5,7 @@ import dotevn from 'dotenv'
 //import user_routes from '../src/handlers/User'
 import product_routes from './handlers/Product'
 import user_routes from './handlers/User'
+import orders_routes from './handlers/Order'
 import authenticatitonRoutes from './handlers/AuthenticationRoute'
 
 // load the env
@@ -32,6 +33,7 @@ app.get('/', function (req: Request, res: Response) {
 user_routes(app)
 authenticatitonRoutes(app)
 product_routes(app)
+orders_routes(app)
 
 app.listen(PORT, function () {
   console.log(`starting app on: ${PORT}`)

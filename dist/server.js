@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 //import user_routes from '../src/handlers/User'
 const Product_1 = __importDefault(require("./handlers/Product"));
 const User_1 = __importDefault(require("./handlers/User"));
+const Order_1 = __importDefault(require("./handlers/Order"));
 const AuthenticationRoute_1 = __importDefault(require("./handlers/AuthenticationRoute"));
 // load the env
 dotenv_1.default.config();
@@ -29,6 +30,7 @@ app.get('/', function (req, res) {
 (0, User_1.default)(app);
 (0, AuthenticationRoute_1.default)(app);
 (0, Product_1.default)(app);
+(0, Order_1.default)(app);
 app.listen(PORT, function () {
     console.log(`starting app on: ${PORT}`);
 });

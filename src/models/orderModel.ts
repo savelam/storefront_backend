@@ -75,13 +75,15 @@ export class OrderStore {
 
       const result = await conn.query(sql, [o.product_id, o.user_id, o.status])
 
-      const product = result.rows[0]
+      const order = result.rows[0]
 
       conn.release()
 
-      return product
+      return order
     } catch (error) {
-      throw new Error(`Unable to create orders (${o.status}): ${error}`)
+      throw new Error(
+        `Unable to create orders (${o.status}): ${error} ${o.product_id}`
+      )
     }
   }
 }

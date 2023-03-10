@@ -13,13 +13,13 @@ const store = new OrderStore()
 const index = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): Promise<Order | void> => {
   try {
     const orders = await store.index()
     res.status(StatusCodes.OK).json(orders)
   } catch (error) {
-    next(error)
+    res.json(`Order error.${error}`)
   }
 }
 
@@ -32,7 +32,8 @@ const create = async (req: Request, res: Response) => {
   }
   try {
     const newOrder = await store.create(order)
-    res.json(newOrder)
+    //res.json(newOrder)
+    res.status(StatusCodes.CREATED).json(newOrder)
   } catch (err) {
     res.status(400)
     res.json(`Order could not be created.${err}`)
@@ -45,7 +46,8 @@ const showOrderStatus = async (
 ): Promise<Order | void> => {
   try {
     const orders = await store.showOrderStatus(req.params.status)
-    res.json(orders)
+    res.status(StatusCodes.OK).json(orders)
+    //res.json(orders)
   } catch (error) {
     res.json(`Order error.${error}`)
   }
@@ -71,7 +73,7 @@ const orders_routes = (app: express.Application) => {
     AuthenticationService.authenticate,
     showOrderStatus
   )
-  app.post('/api/order/product', AuthenticationService.authenticate, create)
+  app.post('/api/orders/product', AuthenticationService.authenticate, create)
   app.get(
     '/api/orders/:status/:user_id',
     AuthenticationService.authenticate,
