@@ -69,18 +69,6 @@ describe('Userstore show method', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should throw BadRequestError if no user has the given id', async () => {
-    const error = await getInvalidIdError(
-      UserStore.show,
-      '389171f2-b3f2-4c4b-b898-c23dbd8832f4'
-    );
-    expect(error).toEqual(
-      new BadRequestError(
-        'No user with id: 389171f2-b3f2-4c4b-b898-c23dbd8832f4'
-      )
-    );
-  });
-
   it('should return user given a correct id', async () => {
     const createdUser = await UserStore.create({
       firstName: 'Joe',

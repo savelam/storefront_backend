@@ -4,6 +4,7 @@ import { OrderStore } from '../../models/Order';
 import { ProductStore } from '../../models/Product';
 import { UserStore } from '../../models/User';
 import { Order } from '../../types/order';
+import { truncateTable } from '../../utils/dbUtils';
 import app from '../../server';
 import { TEST_USER_PASSWORD, API_BASE_URL } from '../../utils/constants';
 
@@ -26,13 +27,15 @@ describe('OrderStore should have ', () => {
 
 describe('OrderStore should', () => {
   it('create order', async () => {
+    await truncateTable('orders');
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Adam',
       lastName: 'Smith',
       password: 'Smith@123'
     });
     const product = await ProductStore.create({
-      name: 'Product  ',
+      name: 'Product  one',
       price: '150',
       category: 'Test'
     });
@@ -60,14 +63,15 @@ describe('OrderStore should', () => {
   });
 
   it('should create multiple orders', async () => {
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Paul',
       lastName: 'Jake',
-      password: 'jake@paul'
+      password: 'Jake@paul21'
     });
 
     const product = await ProductStore.create({
-      name: 'Product 2',
+      name: 'Product two',
       price: '30',
       category: 'Test 2'
     });
@@ -88,10 +92,12 @@ describe('OrderStore should', () => {
   });
 
   it('should complete order', async () => {
+    await truncateTable('orders');
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Anthony',
       lastName: 'Joshua',
-      password: 'joshua@#anthony'
+      password: 'Joshua@#anthony123'
     });
     const product = await ProductStore.create({
       name: 'Fancy Fish',
@@ -122,16 +128,18 @@ describe('OrderStore should', () => {
   });
 
   it('should complete multiple orders', async () => {
+    await truncateTable('orders');
+    await truncateTable('products');
     const multiProduct = await ProductStore.create({
-      name: 'Product 3',
+      name: 'Product three',
       price: '3.45',
-      category: 'Category 3'
+      category: 'Category three'
     });
 
     const multiUser = await UserStore.create({
       firstName: 'Tyson',
       lastName: 'Fury',
-      password: 'fury@$usyk'
+      password: 'Fury@$usyk123'
     });
 
     const multiOrder = (await OrderStore.create({
@@ -176,16 +184,18 @@ describe('OrderStore should', () => {
   });
 
   it('should show active orders by user', async () => {
+    await truncateTable('orders');
+    await truncateTable('products');
     const activeUser = await UserStore.create({
       firstName: 'Usyk',
       lastName: 'Osleksandr',
-      password: 'usyk@38d'
+      password: 'Usyk@38d'
     });
 
     const activeProduct = await ProductStore.create({
-      name: 'Product 7',
+      name: 'Product Seven',
       price: '350',
-      category: 'Category 7'
+      category: 'Category seven'
     });
 
     const orderFour = {
@@ -201,16 +211,18 @@ describe('OrderStore should', () => {
   });
 
   it('should show completed orders by user', async () => {
+    await truncateTable('orders');
+    await truncateTable('categories');
     const compProduct = await ProductStore.create({
       name: 'Plate',
       price: '89',
-      category: 'Category 7'
+      category: 'Category Seven'
     });
 
     const compUser = await UserStore.create({
       firstName: 'Joe',
       lastName: 'Joyce',
-      password: 'joyce@33'
+      password: 'Joyce@33'
     });
 
     const compOrderFive = (await OrderStore.create({
@@ -251,6 +263,7 @@ describe('order route should send status code', () => {
   });
 
   it('201 if order is created', async () => {
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Daniel',
       lastName: 'Duboi',
@@ -275,6 +288,7 @@ describe('order route should send status code', () => {
   });
 
   it('201 if  multiple orders are created', async () => {
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Dell',
       lastName: 'Boy',
@@ -300,6 +314,7 @@ describe('order route should send status code', () => {
   });
 
   it('200 if order is completed', async () => {
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Dell',
       lastName: 'Boy',
@@ -324,6 +339,8 @@ describe('order route should send status code', () => {
   });
 
   it('200 if  multiple orders are complete', async () => {
+    await truncateTable('orders');
+    await truncateTable('products');
     const user = await UserStore.create({
       firstName: 'Otto',
       lastName: 'Wallen',
@@ -331,7 +348,7 @@ describe('order route should send status code', () => {
     });
 
     const product = await ProductStore.create({
-      name: 'Shirt',
+      name: 'Men Shirt',
       price: '23',
       category: 'Fashion'
     });

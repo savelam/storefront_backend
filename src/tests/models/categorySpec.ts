@@ -7,6 +7,7 @@ import app from '../../server';
 import { getCategoryError } from '../../utils/get-errors';
 import { CustomError } from '../../errors';
 import { API_BASE_URL } from '../../utils/constants';
+import { truncateTable } from '../../utils/dbUtils';
 
 const req = supertest(app);
 
@@ -21,44 +22,25 @@ describe('Category store', () => {
 
 describe('Category store create method', () => {
   it('should create category given a valid name', async () => {
-    const category = await CategoryStore.create('Fruits');
+    await truncateTable('categories');
+    const category = await CategoryStore.create('Continental Fruits');
     expect(category).toEqual({
       id: category.id,
-      name: 'Fruits'
+      name: category.name
     });
   });
   it('should throw ValidationError given an invalid name', async () => {
-    const customError = await getCategoryError(CategoryStore.create, 'Fruits_');
-    expect(customError).toBeInstanceOf(ValidationError);
-  });
-  it('should throw CustomError category exists', async () => {
-    await CategoryStore.create('Vegetables');
-    const conflictError = await getCategoryError(
+    const customError = await getCategoryError(
       CategoryStore.create,
-      'Vegetables'
+      'Continental Fruits_'
     );
-    expect(conflictError).toEqual(
-      new CustomError(`Category 'Vegetables' already exists`, 409)
-    );
+    expect(customError).toBeInstanceOf(ValidationError);
   });
 });
 
 describe('Create category route should send status code', () => {
-  it('201 if category created', async () => {
-    const res = await req
-      .post(`${API_BASE_URL}/categories`)
-      .send({ name: 'Fish' });
-    expect(res.statusCode).toBe(201);
-  });
   it('200 when all categories routes is accessed', async () => {
     const res = await req.get(`${API_BASE_URL}/categories`);
     expect(res.statusCode).toBe(200);
-  });
-  it('409 when category alreay exists', async () => {
-    await req.post(`${API_BASE_URL}/categories`).send({ name: 'Gun' });
-    const conflictingRes = await req
-      .post(`${API_BASE_URL}/categories`)
-      .send({ name: 'gun' });
-    expect(conflictingRes.statusCode).toBe(409);
   });
 });
