@@ -1,42 +1,48 @@
-import express, { Request, Response } from 'express'
-import dotevn from 'dotenv'
+import express from 'express';
 
-//import product_routes from '../src/handlers/Product'
-//import user_routes from '../src/handlers/User'
-import product_routes from './handlers/Product'
-import user_routes from './handlers/User'
-import orders_routes from './handlers/Order'
-import authenticatitonRoutes from './handlers/AuthenticationRoute'
+import userRoutes from './handlers/userRoutes';
+import categoryRoutes from './handlers/categoryRoutes';
+import errorHandlerMiddleware from './middleware/error-handler';
+import productRoutes from './handlers/productRoutes';
+import orderRoutes from './handlers/orderRoutes';
+import authRoutes from './handlers/authRoutes';
+import { initDb } from './database';
+import notFoundMiddleWare from './middleware/not-found';
 
-// load the env
-dotevn.config()
+const app: express.Application = express();
 
-const app: express.Application = express()
+app.use(express.json());
 
-// define the port
-const PORT = process.env.PORT || 3000
+let PORT: string;
 
-//const corsOptions = {
-//  origin: 'http://example.com',
-//  optionsSuccessStatus: 200,
-//}
+if (process.env.NODE_ENV == 'dev') {
+  PORT = process.env.DEV_SERVER_PORT as string;
+} else if (process.env.PORT == 'test') {
+  PORT = process.env.TEST_SERVER_PORT as string;
+} else {
+  PORT = '5000';
+}
 
-//console.log(process.env.ENV)
-//app.use(cors(corsOptions))
-app.use(express.json())
+const start = async () => {
+  try {
+    initDb();
+    app.listen(PORT, async function () {
+      console.log(`starting app on: ${PORT}`);
+    });
+  } catch (error) {
+    console.log('Failed to start server: ' + error);
+  }
+};
 
-app.get('/', function (req: Request, res: Response) {
-  res.send('Hello World!')
-})
+start();
 
-// load the product route here
-user_routes(app)
-authenticatitonRoutes(app)
-product_routes(app)
-orders_routes(app)
+userRoutes(app);
+categoryRoutes(app);
+productRoutes(app);
+orderRoutes(app);
+authRoutes(app);
 
-app.listen(PORT, function () {
-  console.log(`starting app on: ${PORT}`)
-})
+app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleWare);
 
-export default app
+export default app;

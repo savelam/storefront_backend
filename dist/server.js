@@ -4,34 +4,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-//import product_routes from '../src/handlers/Product'
-//import user_routes from '../src/handlers/User'
-const Product_1 = __importDefault(require("./handlers/Product"));
-const User_1 = __importDefault(require("./handlers/User"));
-const Order_1 = __importDefault(require("./handlers/Order"));
-const AuthenticationRoute_1 = __importDefault(require("./handlers/AuthenticationRoute"));
-// load the env
-dotenv_1.default.config();
+const userRoutes_1 = __importDefault(require("./handlers/userRoutes"));
+const categoryRoutes_1 = __importDefault(require("./handlers/categoryRoutes"));
+const error_handler_1 = __importDefault(require("./middleware/error-handler"));
+const productRoutes_1 = __importDefault(require("./handlers/productRoutes"));
+const orderRoutes_1 = __importDefault(require("./handlers/orderRoutes"));
+const authRoutes_1 = __importDefault(require("./handlers/authRoutes"));
+const database_1 = require("./database");
+const not_found_1 = __importDefault(require("./middleware/not-found"));
 const app = (0, express_1.default)();
-// define the port
-const PORT = process.env.PORT || 3000;
-//const corsOptions = {
-//  origin: 'http://example.com',
-//  optionsSuccessStatus: 200,
-//}
-//console.log(process.env.ENV)
-//app.use(cors(corsOptions))
 app.use(express_1.default.json());
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-// load the product route here
-(0, User_1.default)(app);
-(0, AuthenticationRoute_1.default)(app);
-(0, Product_1.default)(app);
-(0, Order_1.default)(app);
-app.listen(PORT, function () {
-    console.log(`starting app on: ${PORT}`);
-});
+let PORT;
+if (process.env.NODE_ENV == 'dev') {
+    PORT = process.env.DEV_SERVER_PORT;
+}
+else if (process.env.PORT == 'test') {
+    PORT = process.env.TEST_SERVER_PORT;
+}
+else {
+    PORT = '5000';
+}
+const start = async () => {
+    try {
+        (0, database_1.initDb)();
+        app.listen(PORT, async function () {
+            console.log(`starting app on: ${PORT}`);
+        });
+    }
+    catch (error) {
+        console.log('Failed to start server: ' + error);
+    }
+};
+start();
+(0, userRoutes_1.default)(app);
+(0, categoryRoutes_1.default)(app);
+(0, productRoutes_1.default)(app);
+(0, orderRoutes_1.default)(app);
+(0, authRoutes_1.default)(app);
+app.use(error_handler_1.default);
+app.use(not_found_1.default);
 exports.default = app;

@@ -1,36 +1,75 @@
-import dotenv from 'dotenv'
-import { Pool } from 'pg'
+import path from 'path';
+import fs from 'fs';
 
-dotenv.config()
+import { Pool } from 'pg';
+
+import dotenv from 'dotenv';
+dotenv.config();
 
 const {
-  DATABASE_HOST,
-  DATABASE_NAME,
-  DATABASE_USER,
-  DATABASE_PASSWORD,
-  DATABASE_TEST_DB,
-  ENV,
-} = process.env
+  DEV_DB_HOST,
+  DEV_DB,
+  DEV_DB_USER,
+  DEV_DB_PASS,
+  DEV_DB_PORT,
+  TEST_DB_HOST,
+  TEST_DB,
+  TEST_DB_USER,
+  TEST_DB_PASS,
+  TEST_DB_PORT,
+  NODE_ENV
+} = process.env;
 
-let client: Pool | any
-console.log(ENV)
+let client: Pool;
 
-if (ENV === 'test') {
+if (NODE_ENV === 'dev') {
   client = new Pool({
-    host: DATABASE_HOST,
-    database: DATABASE_TEST_DB,
-    user: DATABASE_USER,
-    password: DATABASE_PASSWORD,
-  })
+    host: DEV_DB_HOST,
+    user: DEV_DB_USER,
+    database: DEV_DB,
+    password: DEV_DB_PASS,
+    port: Number(DEV_DB_PORT)
+  });
+} else {
+  client = new Pool({
+    host: TEST_DB_HOST,
+    user: TEST_DB_USER,
+    database: TEST_DB,
+    password: TEST_DB_PASS,
+    port: Number(TEST_DB_PORT)
+  });
 }
 
-if (ENV === 'dev') {
-  client = new Pool({
-    host: DATABASE_HOST,
-    database: DATABASE_NAME,
-    user: DATABASE_USER,
-    password: DATABASE_PASSWORD,
-  })
-}
+const createDbIfNotExists = async (database: string): Promise<void> => {
+  const conn = await client.connect();
+  const db = await conn.query(
+    `SELECT FROM pg_database WHERE datname = '${database}'`
+  );
+  if (db.rowCount <= 0) {
+    await conn.query(`CREATE DATABASE ${database}`);
+  }
+};
 
-export default client
+const initDb = async (): Promise<void> => {
+  const DEV_DB = process.env.DEV_DB || 'postgres';
+  const { TEST_DB } = process.env;
+
+  createDbIfNotExists(DEV_DB);
+  const conn = await client.connect();
+
+  const migrationsPath = path.join(__dirname, '../migrations/sqls');
+  const migrations = fs.readdirSync(migrationsPath);
+  for (const migration of migrations) {
+    const filePath = `${migrationsPath}/${migration}`;
+    if (path.basename(filePath).split('-').includes('up.sql')) {
+      const sql = fs.readFileSync(filePath).toString();
+      await client.query(sql);
+    }
+  }
+
+  conn.release();
+  createDbIfNotExists(TEST_DB as string);
+};
+
+export { initDb };
+export default client;

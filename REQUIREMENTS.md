@@ -1,69 +1,68 @@
 # API Requirements
+The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
 
-The owners of the business wish to set up an online storefront to display their fantastic product concepts. Users must be able to browse a list of all available products, examine a product's details, and add items to an order that they can later view in their shopping cart. Your coworker is building the frontend, and you have been given the duty of creating the API that will support this application.
+These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
-These are the notes from a meeting with the front-end developer that outline the endpoints the API must provide and the data types that both the front-end and the back-end have agreed satisfy the application's demands.
+## API Endpoints
+### Product Routes
+'/products'  [GET] 
 
-## Our API Endpoints
+'/products/:id' [GET] 
+
+'/products' [POST] 
+
+'/products/categories/:category' [GET]
 
 ### User routes
+'/users'  [GET] 
 
-- '/api/users' [GET]
+'/users/:id'  [GET]
 
-- '/api/users/:id' [GET]
-
-- '/api/users' [POST]
-
-### Product Routes
-
-- '/api/products' [GET]
-
-- '/api/products/:id' [GET]
-
-- '/api/products' [POST]
-
-- '/api/products/:id' [PUT]
-
-- '/api/products/:id' [DELETE]
+'/users'  [POST]
 
 ### Orders routes
+'/orders'  [POST] 
 
-'/api/orders' [GET]
+'/orders/complete-order'  [POST]
 
-'/api/orders/:status/order-status' [GET]
+'/orders/:userId/complete'  [GET]
 
-'/api/order/product' [POST]
+'/orders/:userId/active'  [GET]
 
-### Authentication routes
+### Category routes
+'/categories' [GET] 
 
-'/api/auth/?password' [GET]
+'/categories' [POST] 
 
-## Data Schema
+### Auth routes
+'/auth/?password' [GET]
 
-### Product
+## Data Shapes
+#### Product
+- id [UUID]
+- product_name [VARCHAR]
+- price [NUMERIC]
+- category_id [INTEGER]
 
-- id [INTEGER] [PRIMARY KEY],
-- name [VARCHAR],
-- available_quantity [INTEGER],
-- price [INTEGER]
+#### User
+- id [UUID]
+- first_name [VARCHAR]
+- last_name [VARCHAR]
+- password_digest [VARCHAR]
 
-### User
+#### Category
+- id [INTEGER]
+- category_name [VARCHAR]
 
-- id [INTEGER][PRIMARY KEY],
-- username [VARCHAR],
-- first_name [VARCHAR],
-- last_name [VARCHAR],
-- password [VARCHAR]
-
-### Orders
-
-- id [INTEGER][PRIMARY KEY],,
-- status [VARCHAR],
-- user_id [INTEGER]
+#### Orders
+- id [UUID]
+- user_id [UUID]
+- status [VARCHAR]
+- created_at [TIMESTAMP]
+- completed_at [TIMESTAMP]
 
 ### Orders_Products
-
-- id [INTEGER][PRIMARY KEY],
-- quantity [INTEGER],
-- order_id [INTEGER],
-- product_id [INTEGER]
+- id [UUID]
+- product_id [UUID]
+- order_id [UUID]
+- quantity [INTEGER]

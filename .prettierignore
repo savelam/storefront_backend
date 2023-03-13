@@ -1,4 +1,0 @@
-# prettier config to ignore checking build, dist and nod_modules directories
-build
-dist
-node_modules
